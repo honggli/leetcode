@@ -324,6 +324,21 @@ impl Solution {
     }
 }
 ```
+### 方法二：动态规划
+
+```python
+class Solution:
+    def stoneGameIII(self, stoneValue: List[int]) -> str:
+        n = len(stoneValue)
+        dp = [0] * (n+1) # 定义状态dp[i]表示从i开始拿石子所得的最大分数
+        dp[n-1] = stoneValue[n-1] # 初始化dp[n-1]，即从最后一个石子开始拿，得分为stoneValue[n-1]
+        dp[n-2] = max(stoneValue[n-2]-dp[n-1], stoneValue[n-2]+stoneValue[n-1]) # 初始化dp[n-2]，从倒数第二个石子开始拿，所得分数是拿1个或拿2个的最大值
+        for i in range(n-3, -1, -1): # 反向从第n-3个石子开始，遍历到第0个石子，根据规则选出拿1个、2个或者3个中的最大得分
+            dp[i] = max(stoneValue[i]-dp[i+1], stoneValue[i]+stoneValue[i+1]-dp[i+2], stoneValue[i]+stoneValue[i+1]+stoneValue[i+2]-dp[i+3])
+        if dp[0] > 0: return "Alice"
+        elif dp[0] < 0: return "Bob"
+        else: return "Tie"
+```
 
 <!-- tabs:end -->
 
