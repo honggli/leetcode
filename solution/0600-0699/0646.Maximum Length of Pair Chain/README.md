@@ -174,6 +174,21 @@ impl Solution {
     }
 }
 ```
+### 方法二：排序+动态规划
+
+```python
+class Solution:
+    def findLongestChain(self, pairs: List[List[int]]) -> int:
+        # 动态规划算法
+        pairs = sorted(pairs, key=lambda x: x[0]) # 按照left排序pairs
+        n = len(pairs)
+        dp = [1] * n # 定义状态dp[i]为前i个pair中以pair[i]结尾的最长链的长度，并初始化dp[0]=1
+        for i in range(1, n): # 遍历pairs，计算状态dp[i=1..n-1]
+            for j in range(i): # 遍历以之前pair为结尾的最长链，dp[j=0..i-1]
+                if pairs[i][0] > pairs[j][1]: # 如果当前pair[i]的left大于之前pair[j]的right，则可以将pair[i]添加到pair[j]的最长链后面，构成以pair[i]为结尾的一个链
+                    dp[i] = max(dp[i], dp[j]+1) # 选择长度最大的以pair[i]结尾的链
+        return dp[n-1]
+```
 
 <!-- tabs:end -->
 
